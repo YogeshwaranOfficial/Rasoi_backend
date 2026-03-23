@@ -1,0 +1,70 @@
+// package com.cheflancer.backend.controller;
+
+// import com.cheflancer.backend.dto.VerifyOTPRequest;
+// import com.cheflancer.backend.repository.UserRepository;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.web.bind.annotation.*;
+
+// @RestController
+// @RequestMapping("/api/auth")
+// @CrossOrigin(origins = "http://localhost:5173")
+// public class VerifyOTPController {
+
+//     @Autowired
+//     private UserRepository userRepository;
+
+//     @PostMapping("/verify-otp")
+//     public ResponseEntity<?> verifyOTP(@RequestBody VerifyOTPRequest request) {
+//         return userRepository.findByEmail(request.getEmail())
+//                 .map(user -> {
+//                     // Check if the OTP matches what we sent
+//                     if (user.getOtp() != null && user.getOtp().equals(request.getOtp())) {
+//                         user.setVerified(true);
+//                         user.setOtp(null); // Clear OTP after successful use
+//                         userRepository.save(user);
+//                         return ResponseEntity.ok("Email verified successfully! You can now login.");
+//                     } else {
+//                         return ResponseEntity.status(400).body("Invalid OTP. Please try again.");
+//                     }
+//                 })
+//                 .orElse(ResponseEntity.status(404).body("User not found."));
+//     }
+// }
+
+
+
+package com.cheflancer.backend.controller;
+
+import com.cheflancer.backend.dto.VerifyOTPRequest;
+import com.cheflancer.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
+public class VerifyOTPController {
+
+    @Autowired private UserRepository userRepo;
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verify(@RequestBody VerifyOTPRequest req) {
+        return userRepo.findByEmail(req.getEmail())
+            .map(user -> {
+                if (user.getOtp().equals(req.getOtp())) {
+                    user.setVerified(true);
+                    user.setOtp(null); // Clear OTP after success
+                    userRepo.save(user);
+                    return ResponseEntity.ok("Account verified successfully! You can now login.");
+                } else {
+                    return ResponseEntity.status(400).body("Invalid OTP code.");
+                }
+            })
+            .orElse(ResponseEntity.status(404).body("User not found."));
+    }
+}
+
+
+        String[] ghostNames = {"Nirmal", "Jeyaram", "Seshathri", "Ananth", "Aakash", "vignesh", "SanthoshKanna", "Damu", "VenkateshBhat", "Mathampatti Rangarajan"};

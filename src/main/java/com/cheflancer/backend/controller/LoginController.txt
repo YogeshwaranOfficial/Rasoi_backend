@@ -1,0 +1,54 @@
+package com.cheflancer.backend.controller;
+
+import com.cheflancer.backend.dto.LoginRequest;
+import com.cheflancer.backend.dto.LoginResponse;
+import com.cheflancer.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:5173")
+public class LoginController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        return userRepository.findByEmail(request.getEmail())
+                .map(user -> {
+                    // Password check (plain text for now as per your code)
+                    if (user.getPassword().equals(request.getPassword())) {
+                        
+                        // Verification Guard
+                        if (!user.isVerified()) {
+                            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                    .body("Please verify your email first.");
+                        }
+
+                        // Prepare the response for React
+                        LoginResponse response = new LoginResponse();
+                        response.setId(user.getId());
+                        response.setName(user.getName());
+                        response.setEmail(user.getEmail());
+                        
+                        // Convert Enum to String to fix the Role mismatch
+                        if (user.getRole() != null) {
+                            response.setRole(user.getRole().name()); 
+                        }
+                        
+                        response.setVerified(user.isVerified());
+
+                        return ResponseEntity.ok(response);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body("Invalid credentials.");
+                    }
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("User not found."));
+    }
+}
