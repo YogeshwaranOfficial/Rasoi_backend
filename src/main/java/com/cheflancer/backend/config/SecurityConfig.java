@@ -12,17 +12,36 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
+    // @Bean
+    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    //     http.csrf(csrf -> csrf.disable()) // Required for Postman/React testing
+    //         .cors(cors -> cors.configurationSource(request -> {
+    //             CorsConfiguration config = new CorsConfiguration();
+    //             config.setAllowedOrigins(List.of("http://localhost:5173")); // Your React Port
+    //             config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+    //             config.setAllowedHeaders(List.of("*"));
+    //             return config;
+    //         }))
+    //         .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); // Allows testing without JWT first
+            
+    //     return http.build();
+    // }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()) // Required for Postman/React testing
+        http.csrf(csrf -> csrf.disable()) 
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(List.of("http://localhost:5173")); // Your React Port
-                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                // --- ADD BOTH LOCAL AND PRODUCTION URLS HERE ---
+                config.setAllowedOrigins(List.of(
+                    "http://localhost:5173", 
+                    "https://rasoifrontend.vercel.app" 
+                )); 
+                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 config.setAllowedHeaders(List.of("*"));
+                config.setAllowCredentials(true); // Required for sessions/cookies if used
                 return config;
             }))
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); // Allows testing without JWT first
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); 
             
         return http.build();
     }
