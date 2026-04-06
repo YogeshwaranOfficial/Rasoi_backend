@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/chefs")
-@CrossOrigin(origins = "http://localhost:5173")
+
 public class ChefController {
 
     @Autowired private ChefRepository chefRepo;

@@ -9,7 +9,7 @@ import java.util.List; // 2. IMPORT JAVA UTIL LIST
 
 @RestController
 @RequestMapping("/api/home")
-@CrossOrigin(origins = "http://localhost:5173")
+
 public class HomeBannerController {
 
     @Autowired 

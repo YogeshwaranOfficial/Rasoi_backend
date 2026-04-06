@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin(origins = "http://localhost:5173")
+
 public class AdminController {
 
     @Autowired private UserRepository userRepo;

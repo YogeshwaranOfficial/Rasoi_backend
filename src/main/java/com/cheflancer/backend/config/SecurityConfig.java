@@ -26,25 +26,26 @@ public class SecurityConfig {
             
     //     return http.build();
     // }
-    @Bean
+   @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()) 
-            .cors(cors -> cors.configurationSource(request -> {
-                CorsConfiguration config = new CorsConfiguration();
-                // --- ADD BOTH LOCAL AND PRODUCTION URLS HERE ---
-                config.setAllowedOrigins(List.of(
-                    "http://localhost:5173", 
-                    "https://rasoifrontend.vercel.app" 
-                )); 
-                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                config.setAllowedHeaders(List.of("*"));
-                config.setAllowCredentials(true); // Required for sessions/cookies if used
-                return config;
-            }))
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); 
-            
-        return http.build();
-    }
+    http.csrf(csrf -> csrf.disable()) 
+        .cors(cors -> cors.configurationSource(request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            // This allows both local testing and your live site
+            config.setAllowedOrigins(List.of(
+                "http://localhost:5173", 
+                "http://localhost:3000",
+                "https://rasoifrontend.vercel.app"
+            )); 
+            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+            config.setAllowedHeaders(List.of("*")); // Allows all headers
+            config.setAllowCredentials(true); 
+            return config;
+        }))
+        .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); 
+        
+    return http.build();
+}
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

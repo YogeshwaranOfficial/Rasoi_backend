@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/foods")
 // FIXED: Use 5173 consistently (Standard for Vite/React)
-@CrossOrigin(origins = "http://localhost:5173") 
+ 
 public class FoodController {
 
     @Autowired

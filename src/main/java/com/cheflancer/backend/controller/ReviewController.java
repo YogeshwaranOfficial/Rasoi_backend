@@ -11,7 +11,7 @@ import java.util.Objects; // ADDED FOR NULL SAFETY
 
 @RestController
 @RequestMapping("/api/reviews")
-@CrossOrigin(origins = "http://localhost:5173")
+
 public class ReviewController {
 
     @Autowired 

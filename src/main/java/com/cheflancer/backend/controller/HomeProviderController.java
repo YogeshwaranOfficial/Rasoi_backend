@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/home-providers")
-@CrossOrigin(origins = "http://localhost:5173")
+
 public class HomeProviderController {
 
     @Autowired private HomeProviderRepository homeRepo;
